@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">BlackBerry Unlocker</string>
+	<string name="mep">MEP</string>
+	<string name="imei">IMEI</string>
+	<string name="save">Save!</string>
+	<string name="exit">Exit</string>
+	<string name="applicationLogo">Application Logo</string>
+	<string name="irtciLogo">IRTCI Logo</string>
+	<string name="gpgindustriesLogo">GPGindustries Logo</string>
+</resources>

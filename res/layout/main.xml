@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    	android:background="@drawable/background"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/toplogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginBottom="2.0dp"
+            android:layout_marginTop="2.0dp"
+            android:background="@drawable/icono"
+            android:contentDescription="@string/applicationLogo" />
+
+        <TextView
+            android:id="@+id/imeiLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/imei"
+            android:textSize="20.0dip"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/imeiEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/mepLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mep"
+            android:textSize="20.0dip"
+            android:textStyle="italic" />
+
+        <Spinner
+            android:id="@+id/mepSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/unlockCodeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <ImageView
+            android:id="@+id/gpgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="7.0dp"
+            android:layout_marginTop="7.0dp"
+            android:background="@drawable/gpg"
+            android:contentDescription="@string/gpgindustriesLogo" />
+        
+        <ImageView
+            android:id="@+id/irtciLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="7.0dp"
+            android:layout_marginTop="7.0dp"
+            android:background="@drawable/irtci"
+            android:contentDescription="@string/irtciLogo" />
+    </LinearLayout>
+
+</ScrollView>

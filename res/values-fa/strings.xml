@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">رمزگشای بلک‌‌بری</string>
+	<string name="mep">MEP</string>
+	<string name="imei">IMEI</string>
+	<string name="save">ذخیره‌سازی</string>
+	<string name="exit">خروج</string>
+	<string name="applicationLogo">نشان برنامه</string>
+	<string name="irtciLogo">نشان IRTCI</string>
+	<string name="gpgindustriesLogo">نشان GPGindustries</string>
+</resources>
