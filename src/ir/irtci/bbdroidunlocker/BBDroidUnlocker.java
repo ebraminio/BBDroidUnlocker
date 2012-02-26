@@ -39,6 +39,7 @@ public class BBDroidUnlocker {
 	 * @throws Exception, document parsing exceptions
 	 */
 	public void loadMepsList(InputStream xmlStream) throws Exception {
+		
 		mepsMap = new HashMap<String, BigInteger>();
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
@@ -60,9 +61,11 @@ public class BBDroidUnlocker {
 	 * @return a sorted list supported meps.
 	 */
 	public List<String> getSortedMepsList() {
+		
 		ArrayList<String> sortedMepsList = new ArrayList<String>(mepsMap.keySet());
 		sortedMepsList.add("");
 		Collections.sort(sortedMepsList);
+		
 		return sortedMepsList;
 	}
 
@@ -74,7 +77,9 @@ public class BBDroidUnlocker {
 	 * @return UnlockCode
 	 */
 	public String generateUnlockCode(String imei, String selectedMep) {
+		
 		if (mepsMap != null) {
+			
 			try {
 				BigInteger biOfItem = mepsMap.get(selectedMep);
 				byte[] mep = biOfItem.toByteArray();
@@ -95,7 +100,9 @@ public class BBDroidUnlocker {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
 		}
+		
 		return "Some problems on calculation...";
 	}
 	
@@ -108,10 +115,12 @@ public class BBDroidUnlocker {
 	 * @return
 	 */
 	private boolean meps8Digit(String mep) {
+		
 		for (String i : m8ds) {
 			if (i.equals(mep))
 				return true;
 		}
+		
 		return false;
 	}
 	
@@ -120,10 +129,13 @@ public class BBDroidUnlocker {
 	 * @return
 	 */
 	private int byteToUnsignedInt(byte b) {
+		
 		int i = b;
+		
 		if (b < 0) {
 			i = 256 + i;
 		}
+		
 		return i;
 	}
 	
@@ -133,12 +145,10 @@ public class BBDroidUnlocker {
 	 * @return
 	 */
 	private String myHashToCode(byte[] hash, String mep) {
-		String buf, st;
-		int size;
 		
-		buf = "";
+		String buf = "", st;
+		int size = 16;
 		
-		size = 16;
 		if (meps8Digit(mep)) {
 			size = 7;
 		}
@@ -147,18 +157,22 @@ public class BBDroidUnlocker {
 			st = Integer.toString(byteToUnsignedInt(hash[i]));
 			buf = buf + st.charAt(st.length() - 1);
 		}
+		
 		return buf;
 	}
 
 	/**
 	 * Safely converting a byte array to int.
+	 * 
 	 * @param byteArray
 	 * @param index
 	 * @return
 	 */
 	private int safeByteArrayToInt(byte[] byteArray, int index) {
+		
 		if (byteArray.length <= index)
 			return 0;
+		
 		return byteArray[index];
 	}
 	
@@ -173,22 +187,26 @@ public class BBDroidUnlocker {
 	 * @return
 	 */
 	private byte[] createPrivatePass(byte[] mepFileId) {
+		
 		byte[] result = new byte[16];
+		
 		for (int i = 0; i < 16; i++) {
 			result[i] = (byte) (safeByteArrayToInt(mepFileId, i) ^ safeByteArrayToInt(mepKey, i));
 		}
+		
 		return result;
 	}
 
 	/**
-	 * A weird algorithm, I don't know what is it :D
 	 * @param ch
 	 * @return
 	 */
 	private byte strNumber2Byte(String ch) {
+		
 		if (Integer.parseInt(ch) > 9) {
 			return (byte)0;
 		}
+		
 		return (byte)(0x30 + Integer.parseInt(ch));
 	}
 	
@@ -210,6 +228,7 @@ public class BBDroidUnlocker {
 		for (int i = 0; i < size; i++) {
 			imei[i] = strNumber2Byte(imei_i.charAt(i) + "");
 		}
+		
 		imei[size] = mepNumber;
 
 		for (int i = 0; i < 64; i++) {
@@ -217,20 +236,19 @@ public class BBDroidUnlocker {
 			kipad[i] = (byte) (safeByteArrayToInt(prPass, i) ^ 0x36);
 		}
 		
-		byte[] digest1;
+		byte[] digest;
+		MessageDigest digester;
+		
+		digester = MessageDigest.getInstance("SHA1");
+		digester.update(kipad);
+		digester.update(imei);
+		digest = digester.digest();
 
-		MessageDigest digester1 = MessageDigest.getInstance("SHA1");
-		digester1.update(kipad);
-		digester1.update(imei);
-		digest1 = digester1.digest();
-
-		byte[] digest2;
-
-		MessageDigest digester2 = MessageDigest.getInstance("SHA1");
-		digester2 = MessageDigest.getInstance("SHA1");
-		digester2.update(kopad);
-		digester2.update(digest1);
-		digest2 = digester2.digest();
-		return digest2;
+		digester = MessageDigest.getInstance("SHA1");
+		digester.update(kopad);
+		digester.update(digest);
+		digest = digester.digest();
+		
+		return digest;
 	}
 }
