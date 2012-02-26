@@ -1,3 +1,12 @@
+/*
+ * Logic of BBDroidUnlocker that can be used 
+ * in not android applications also.
+ * 
+ * Ported by ebrahim@byagowi.com from a Delphi project.
+ * 
+ * Some needed data of this code moved to an external xml (see #loadMepsList)
+ * for reducing LOC and preventing code duplication.
+ */
 package ir.irtci.bbdroidunlocker;
 
 import java.io.InputStream;
@@ -5,7 +14,10 @@ import java.math.BigInteger;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,19 +29,23 @@ import org.w3c.dom.NodeList;
 
 public class BBDroidUnlocker {
 
-	/**
-	 * 
-	 */
-	public Map<String, BigInteger> mepsMap;
+	private Map<String, BigInteger> mepsMap;
 
-	public void loadMepsList(InputStream rawStream) throws Exception {
+	/**
+	 * Loading meps details from given xml (through xmlStream parameter).
+	 * This method most called after creating BBDroidUnlocker object.
+	 * 
+	 * @param xmlStream, needed data xml InputStream 
+	 * @throws Exception, document parsing exceptions
+	 */
+	public void loadMepsList(InputStream xmlStream) throws Exception {
 		mepsMap = new HashMap<String, BigInteger>();
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
 
-		Document doc = builder.parse(rawStream);
+		Document document = builder.parse(xmlStream);
 
-		NodeList meps = doc.getElementsByTagName("mep");
+		NodeList meps = document.getElementsByTagName("mep");
 		for (int i = 0; i < meps.getLength(); i++) {
 			Node node = meps.item(i);
 			String key = node.getAttributes().getNamedItem("name")
@@ -39,11 +55,23 @@ public class BBDroidUnlocker {
 			mepsMap.put(key, value);
 		}
 	}
+	
+	/**
+	 * @return a sorted list supported meps.
+	 */
+	public List<String> getSortedMepsList() {
+		ArrayList<String> sortedMepsList = new ArrayList<String>(mepsMap.keySet());
+		sortedMepsList.add("");
+		Collections.sort(sortedMepsList);
+		return sortedMepsList;
+	}
 
 	/**
+	 * Generating unlock from given parameters.
+	 * 
 	 * @param imei
 	 * @param selectedMep
-	 * @return
+	 * @return UnlockCode
 	 */
 	public String generateUnlockCode(String imei, String selectedMep) {
 		if (mepsMap != null) {
@@ -71,12 +99,11 @@ public class BBDroidUnlocker {
 		return "Some problems on calculation...";
 	}
 	
-	/**
-	 * 
-	 */
-	String[] m8ds = new String[] { "MEP-23361-001", "MEP-30218-002", "MEP-15326-002", "MEP-04626-002", "MEP-27501-003", "MEP-31845-001", "MEP-22793-001", "MEP-04103-001" };
+	private String[] m8ds = new String[] { "MEP-23361-001", "MEP-30218-002", "MEP-15326-002", "MEP-04626-002", "MEP-27501-003", "MEP-31845-001", "MEP-22793-001", "MEP-04103-001" };
 	
 	/**
+	 * Detect that unlock code must be in 8 digit or not.
+	 * 
 	 * @param mep
 	 * @return
 	 */
@@ -92,7 +119,7 @@ public class BBDroidUnlocker {
 	 * @param b
 	 * @return
 	 */
-	public int byteToUnsignedInt(byte b) {
+	private int byteToUnsignedInt(byte b) {
 		int i = b;
 		if (b < 0) {
 			i = 256 + i;
@@ -124,20 +151,21 @@ public class BBDroidUnlocker {
 	}
 
 	/**
-	 * @param a
-	 * @param i
+	 * Safely converting a byte array to int.
+	 * @param byteArray
+	 * @param index
 	 * @return
 	 */
-	private int safeByteArrayToInt(byte[] a, int i) {
-		if (a.length <= i)
+	private int safeByteArrayToInt(byte[] byteArray, int index) {
+		if (byteArray.length <= index)
 			return 0;
-		return a[i];
+		return byteArray[index];
 	}
 	
 	/**
-	 * 
+	 * A special key, I don't know what means really :D
 	 */
-	byte[] mepKey = new BigInteger("162799C2C899B8C9DEED77A262D2665E", 16)
+	private byte[] mepKey = new BigInteger("162799C2C899B8C9DEED77A262D2665E", 16)
 			.toByteArray();
 	
 	/**
@@ -153,6 +181,7 @@ public class BBDroidUnlocker {
 	}
 
 	/**
+	 * A weird algorithm, I don't know what is it :D
 	 * @param ch
 	 * @return
 	 */

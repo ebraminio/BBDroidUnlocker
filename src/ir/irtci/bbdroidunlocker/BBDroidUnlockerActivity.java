@@ -1,8 +1,7 @@
 package ir.irtci.bbdroidunlocker;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -102,10 +101,7 @@ public class BBDroidUnlockerActivity extends Activity implements
 			e.printStackTrace();
 		}
 
-		ArrayList<String> sortedMepsList = new ArrayList<String>(bbDroidUnlocker.mepsMap.keySet());
-		sortedMepsList.add("");
-		Collections.sort(sortedMepsList);
-		
+		List<String> sortedMepsList = bbDroidUnlocker.getSortedMepsList();
 
 		mepSpinner.setOnItemSelectedListener(this);
 		ArrayAdapter<String> aa = new ArrayAdapter<String>(this,
