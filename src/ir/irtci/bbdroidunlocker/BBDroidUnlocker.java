@@ -220,6 +220,7 @@ public class BBDroidUnlocker {
 	 */
 	private byte[] mySha1(String imei_i, byte[] prPass, byte mepNumber)
 			throws NoSuchAlgorithmException, DigestException {
+		
 		int size = 15;
 		byte[] kopad = new byte[64];
 		byte[] kipad = new byte[64];
@@ -237,18 +238,15 @@ public class BBDroidUnlocker {
 		}
 		
 		byte[] digest;
-		MessageDigest digester;
+		MessageDigest digester = MessageDigest.getInstance("SHA1");
 		
-		digester = MessageDigest.getInstance("SHA1");
 		digester.update(kipad);
 		digester.update(imei);
 		digest = digester.digest();
-
-		digester = MessageDigest.getInstance("SHA1");
+		
+		digester.reset();
 		digester.update(kopad);
 		digester.update(digest);
-		digest = digester.digest();
-		
-		return digest;
+		return digester.digest();
 	}
 }
