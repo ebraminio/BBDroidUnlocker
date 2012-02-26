@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 public class BBDroidUnlockerActivity extends Activity implements
 		AdapterView.OnItemSelectedListener {
-	/** Called when the activity is first created. */
 	Button calcButton;
 	EditText imeiEditText;
 	Spinner mepSpinner;
@@ -68,6 +67,7 @@ public class BBDroidUnlockerActivity extends Activity implements
 				.setIcon(R.drawable.icon)
 				.create()
 					.show();
+			
 			break;
 		case R.id.menu_exit:
 			finish();
@@ -86,18 +86,15 @@ public class BBDroidUnlockerActivity extends Activity implements
 		unlockCodeTextView = (TextView) findViewById(R.id.unlockCodeTextView);
 
 		findViewById(R.id.irtciLogo).setOnClickListener(
-				new LinkOnClickListener(
-						"http://www.irtci.ir/forum"));
+				new LinkOnClickListener("http://www.irtci.ir/forum"));
 		
 		findViewById(R.id.gpgLogo).setOnClickListener(
-				new LinkOnClickListener(
-						"http://www.gpgindustries.com"));
+				new LinkOnClickListener("http://www.gpgindustries.com"));
 		
 		bbDroidUnlocker = new BBDroidUnlocker();
 		try {
 			bbDroidUnlocker.loadMepsList(getResources().openRawResource(R.raw.meps));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -152,6 +149,7 @@ public class BBDroidUnlockerActivity extends Activity implements
 	private void generateUnlockCode() {
 		String imei = imeiEditText.getText().toString();
 		String selectedMep = mepSpinner.getSelectedItem().toString();
+		
 		if (!selectedMep.equals("") && (imei.length() == 15)) {
 			unlockCodeTextView.setText(bbDroidUnlocker.generateUnlockCode(imei, selectedMep));
 		} else {
